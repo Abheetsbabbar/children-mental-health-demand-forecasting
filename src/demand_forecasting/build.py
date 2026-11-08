@@ -1,6 +1,6 @@
 """Extract, stage and model the monthly series with DuckDB.
 
-Run:  python -m cypmh_forecast.build
+Run:  python -m demand_forecasting.build
 Outputs (small, committed):
     data/processed/referrals_monthly.csv
     data/processed/waiting_list_monthly.csv

@@ -8,7 +8,7 @@ import pandera.pandas as pa
 import pytest
 from pandera import Check, Column
 
-from cypmh_forecast.download import pick_four_week_wait_link
+from demand_forecasting.download import pick_four_week_wait_link
 
 ROOT = Path(__file__).resolve().parents[1]
 PROCESSED = ROOT / "data" / "processed"

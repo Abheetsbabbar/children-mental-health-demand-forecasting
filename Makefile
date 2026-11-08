@@ -4,13 +4,13 @@ install:            ## install package + dev tools
 	pip install -e ".[dev]"
 
 data:               ## download NHS time series, 29 monthly four-week-wait files, bank holidays
-	python -m cypmh_forecast.download
+	python -m demand_forecasting.download
 
 build:              ## DuckDB staging -> monthly marts + working-day calendar
-	python -m cypmh_forecast.build
+	python -m demand_forecasting.build
 
 analysis:           ## backtests, forecasts, simulator calibration/validation, scenarios, figures
-	python -m cypmh_forecast.analysis
+	python -m demand_forecasting.analysis
 
 test:               ## models, simulator, data contracts
 	pytest -q

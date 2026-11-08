@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from cypmh_forecast import simulate as sim
+from demand_forecasting import simulate as sim
 
 
 def flat_state(total=1000.0, max_age=400):

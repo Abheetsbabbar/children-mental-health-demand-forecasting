@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cypmh_forecast import models as M
+from demand_forecasting import models as M
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 """Download raw open data (idempotent).
 
-Run:  python -m cypmh_forecast.download
+Run:  python -m demand_forecasting.download
 """
 
 from __future__ import annotations

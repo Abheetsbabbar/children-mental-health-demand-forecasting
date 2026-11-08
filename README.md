@@ -1,6 +1,6 @@
 # Forecasting Demand and Simulating the Waiting List for Children's Mental Health Services
 
-[![CI](https://github.com/Abheetsbabbar/cyp-mental-health-demand-forecasting/actions/workflows/ci.yml/badge.svg)](https://github.com/Abheetsbabbar/cyp-mental-health-demand-forecasting/actions/workflows/ci.yml)
+[![CI](https://github.com/Abheetsbabbar/children-mental-health-demand-forecasting/actions/workflows/ci.yml/badge.svg)](https://github.com/Abheetsbabbar/children-mental-health-demand-forecasting/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![Data](https://img.shields.io/badge/data-NHS%20England%20open%20data-005EB8)
 ![Licence](https://img.shields.io/badge/code-MIT-green)
@@ -15,9 +15,9 @@ Part 2 of a three-project portfolio on children and young people's mental health
 
 | # | Project | Question |
 |---|---|---|
-| 1 | [Access & inequalities](https://github.com/Abheetsbabbar/cyp-mental-health-access-inequalities) | Where, and for whom, is access to children's mental-health care unequal? |
+| 1 | [Access & inequalities](https://github.com/Abheetsbabbar/children-mental-health-access-inequalities) | Where, and for whom, is access to children's mental-health care unequal? |
 | **2** | **Demand forecasting & waiting-list simulation (this repo)** | How many referrals are coming, and what capacity would clear the waiting list? |
-| 3 | [Explainable self-harm risk model](https://github.com/Abheetsbabbar/cyp-mental-health-self-harm-risk-ml) | Which local social factors explain youth self-harm admissions, and which areas exceed expectation? |
+| 3 | [Explainable self-harm risk model](https://github.com/Abheetsbabbar/youth-self-harm-explainable-ml) | Which local social factors explain youth self-harm admissions, and which areas exceed expectation? |
 
 ---
 
@@ -48,14 +48,14 @@ Part 2 of a three-project portfolio on children and young people's mental health
 
 | Area | What was used | Where |
 |---|---|---|
-| **Data engineering** | Automated scraping of 29 monthly NHS publication pages (choosing Final over Performance files and the latest `_v2` re-issue); a 700 MB, 10-year time series processed in **DuckDB**; a SQL macro that parses **5 inconsistent date formats**; a stock-and-flow identity to derive unpublished exits | [`download.py`](src/cypmh_forecast/download.py), [`sql/`](sql/) |
-| **Feature engineering** | Working days per month from the **gov.uk bank-holidays API**; month-of-year effects; rolling-to-monthly flow conversion | [`build.py`](src/cypmh_forecast/build.py) |
-| **Forecasting** | Seasonal-naive benchmark; **ETS** (damped trend, log scale); **SARIMAX** with an exogenous regressor and AIC order selection; **harmonic/dummy regression**; a **geometric-mean ensemble**; 80% prediction intervals | [`models.py`](src/cypmh_forecast/models.py) |
-| **Evaluation** | **Rolling-origin (expanding-window) cross-validation**, 18 origins × 6-month horizon; **MASE**, MAPE, MAE; prediction-interval **coverage**; order selection on the first window only (no leakage) | [`models.py`](src/cypmh_forecast/models.py) |
-| **Hierarchical forecasting** | Age-band hierarchy reconciled with **OLS/WLS optimal combination** (Hyndman et al.) and bottom-up | [`models.py`](src/cypmh_forecast/models.py) |
-| **Time-series decomposition** | **STL** (robust) seasonal decomposition | [`analysis.py`](src/cypmh_forecast/analysis.py) |
-| **Simulation / operational research** | Daily **discrete-time stochastic queue** tracking each child's wait; priority-weighted capacity allocation (water-filling); **Monte Carlo** (Poisson arrivals and capacity); FIFO, newest-first and ring-fenced policies; fluid steady-state approximation | [`simulate.py`](src/cypmh_forecast/simulate.py) |
-| **Calibration and validation** | 496-point **grid-search calibration** against observed median/p90 waits on one year, with a parsimony rule; **out-of-sample validation** on the following year | [`analysis.py`](src/cypmh_forecast/analysis.py) |
+| **Data engineering** | Automated scraping of 29 monthly NHS publication pages (choosing Final over Performance files and the latest `_v2` re-issue); a 700 MB, 10-year time series processed in **DuckDB**; a SQL macro that parses **5 inconsistent date formats**; a stock-and-flow identity to derive unpublished exits | [`download.py`](src/demand_forecasting/download.py), [`sql/`](sql/) |
+| **Feature engineering** | Working days per month from the **gov.uk bank-holidays API**; month-of-year effects; rolling-to-monthly flow conversion | [`build.py`](src/demand_forecasting/build.py) |
+| **Forecasting** | Seasonal-naive benchmark; **ETS** (damped trend, log scale); **SARIMAX** with an exogenous regressor and AIC order selection; **harmonic/dummy regression**; a **geometric-mean ensemble**; 80% prediction intervals | [`models.py`](src/demand_forecasting/models.py) |
+| **Evaluation** | **Rolling-origin (expanding-window) cross-validation**, 18 origins × 6-month horizon; **MASE**, MAPE, MAE; prediction-interval **coverage**; order selection on the first window only (no leakage) | [`models.py`](src/demand_forecasting/models.py) |
+| **Hierarchical forecasting** | Age-band hierarchy reconciled with **OLS/WLS optimal combination** (Hyndman et al.) and bottom-up | [`models.py`](src/demand_forecasting/models.py) |
+| **Time-series decomposition** | **STL** (robust) seasonal decomposition | [`analysis.py`](src/demand_forecasting/analysis.py) |
+| **Simulation / operational research** | Daily **discrete-time stochastic queue** tracking each child's wait; priority-weighted capacity allocation (water-filling); **Monte Carlo** (Poisson arrivals and capacity); FIFO, newest-first and ring-fenced policies; fluid steady-state approximation | [`simulate.py`](src/demand_forecasting/simulate.py) |
+| **Calibration and validation** | 496-point **grid-search calibration** against observed median/p90 waits on one year, with a parsimony rule; **out-of-sample validation** on the following year | [`analysis.py`](src/demand_forecasting/analysis.py) |
 | **Quality assurance** | **pytest** (conservation laws, known answers, reconciliation coherence); **pandera** data contracts (continuity, identities); **ruff**; **GitHub Actions CI** | [`tests/`](tests/) |
 
 **Stack:** Python 3.11 · DuckDB · pandas · NumPy · statsmodels · SciPy · Matplotlib · pandera · pytest · ruff · GitHub Actions
@@ -65,11 +65,11 @@ Part 2 of a three-project portfolio on children and young people's mental health
 ## Repository structure
 
 ```
-cyp-mental-health-demand-forecasting/
+children-mental-health-demand-forecasting/
 ├── README.md
 ├── Makefile                      ← make all = download → build → analysis → test
 ├── pyproject.toml
-├── src/cypmh_forecast/
+├── src/demand_forecasting/
 │   ├── config.py                 ← sources, horizons, backtest settings
 │   ├── download.py               ← NHS time series + 29 monthly 4WW files + bank holidays
 │   ├── build.py                  ← DuckDB staging/marts, working-day calendar
@@ -97,8 +97,8 @@ cyp-mental-health-demand-forecasting/
 ## How to run it
 
 ```bash
-git clone https://github.com/Abheetsbabbar/cyp-mental-health-demand-forecasting.git
-cd cyp-mental-health-demand-forecasting
+git clone https://github.com/Abheetsbabbar/children-mental-health-demand-forecasting.git
+cd children-mental-health-demand-forecasting
 python -m venv .venv && source .venv/bin/activate
 make install
 ```

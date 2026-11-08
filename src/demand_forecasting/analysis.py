@@ -1,6 +1,6 @@
 """Forecasting + simulation pipeline: backtests, final forecast, scenarios, figures, results.json.
 
-Run:  python -m cypmh_forecast.analysis
+Run:  python -m demand_forecasting.analysis
 """
 
 from __future__ import annotations
