@@ -1,0 +1,203 @@
+{
+  "data": {
+    "referral_months": 53,
+    "first_month": "2022-04-30",
+    "last_month": "2026-08-31",
+    "waiting_list_months": 29
+  },
+  "sarima_order": {
+    "order": [
+      0,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      1,
+      1,
+      0,
+      12
+    ]
+  },
+  "backtest": {
+    "Harmonic regression": {
+      "MAE": 3837.982,
+      "MAPE": 3.831,
+      "MASE": 0.56,
+      "PI80_coverage": 80.556,
+      "n": 108
+    },
+    "Ensemble": {
+      "MAE": 3898.398,
+      "MAPE": 3.951,
+      "MASE": 0.569,
+      "PI80_coverage": 76.852,
+      "n": 108
+    },
+    "SARIMAX + working days": {
+      "MAE": 4427.868,
+      "MAPE": 4.376,
+      "MASE": 0.646,
+      "PI80_coverage": 75.0,
+      "n": 108
+    },
+    "ETS (damped, log)": {
+      "MAE": 5320.344,
+      "MAPE": 5.385,
+      "MASE": 0.781,
+      "PI80_coverage": 59.259,
+      "n": 108
+    },
+    "Seasonal naive": {
+      "MAE": 5628.519,
+      "MAPE": 5.397,
+      "MASE": 0.826,
+      "PI80_coverage": null,
+      "n": 108
+    }
+  },
+  "backtest_origins": 18,
+  "forecast": {
+    "best_model_by_MASE": "Harmonic regression",
+    "next_12m_total_ensemble": 1306516.4579827713,
+    "last_12m_actual_total": 1277664.0,
+    "growth_pct": 2.2582195305472563,
+    "monthly": {
+      "2026-09-30": 101814,
+      "2026-10-31": 116737,
+      "2026-11-30": 119273,
+      "2026-12-31": 100564,
+      "2027-01-31": 114668,
+      "2027-02-28": 113512,
+      "2027-03-31": 125327,
+      "2027-04-30": 105017,
+      "2027-05-31": 110893,
+      "2027-06-30": 119970,
+      "2027-07-31": 110013,
+      "2027-08-31": 68728
+    }
+  },
+  "hierarchy_total_MAPE": {
+    "base": 5.3854046113805865,
+    "bottom_up": 5.1941803384733705,
+    "ols": 5.315512909705319,
+    "wls": 5.229759348052559
+  },
+  "hierarchy_band_MAPE": {
+    "base": {
+      "0-5": 9.684153704269116,
+      "6-10": 6.599658937254397,
+      "11-15": 5.678807573052583,
+      "16-17": 4.775053267787354
+    },
+    "wls": {
+      "0-5": 9.825440379343718,
+      "6-10": 6.6535463052220285,
+      "11-15": 5.732359873340845,
+      "16-17": 4.732996007151876
+    }
+  },
+  "simulation_calibration": {
+    "start_month": "2024-08-31",
+    "calibration": "2024-09-30 to 2025-08-31",
+    "validation": "2025-09-30 to 2026-08-31",
+    "k_serve_per_day": 0.1503,
+    "k_exit_per_day": 0.0,
+    "priority_half_life_days": 4.611757688356256,
+    "chosen_loss": 0.01613261278309346,
+    "best_loss_on_grid": 0.015416461874991967,
+    "random_order_loss": 0.7728903903446569,
+    "fifo_loss": 1.238388576132504,
+    "grid_size": 496
+  },
+  "simulation_validation_MAPE": {
+    "waiting_list_size": 4.174260428106649,
+    "median_wait": 3.430073641412231,
+    "p90_wait": 12.1352431191313
+  },
+  "scenarios": {
+    "inputs": {
+      "demand_spells_per_month_next12": 70409.25178364028,
+      "capacity_first_contacts_per_month": 52556.416666666664,
+      "theta_monthly_exit_without_contact": 0.05053722136418091,
+      "referral_to_spell_ratio": 0.6466899182488713,
+      "start_waiting": 279604.0,
+      "start_median_wait": 290.0
+    },
+    "steady_state_list_size_status_quo": 353261.11398809735,
+    "capacity_to_stop_list_growing": 56278.84254132985,
+    "at_24_months": {
+      "25% ring-fenced for longest waiters +0%": {
+        "waiting": 318902,
+        "median_wait_days": 189.0,
+        "pct_over_52_weeks": 14.0,
+        "pct_over_4_weeks": 96.0
+      },
+      "Current priorities +0%": {
+        "waiting": 318485,
+        "median_wait_days": 410.0,
+        "pct_over_52_weeks": 51.1,
+        "pct_over_4_weeks": 99.3
+      },
+      "Strict FIFO +0%": {
+        "waiting": 318600,
+        "median_wait_days": 83.0,
+        "pct_over_52_weeks": 0.0,
+        "pct_over_4_weeks": 87.7
+      },
+      "25% ring-fenced for longest waiters +10%": {
+        "waiting": 246116,
+        "median_wait_days": 170.5,
+        "pct_over_52_weeks": 2.9,
+        "pct_over_4_weeks": 96.1
+      },
+      "Current priorities +10%": {
+        "waiting": 246615,
+        "median_wait_days": 468.0,
+        "pct_over_52_weeks": 55.8,
+        "pct_over_4_weeks": 99.4
+      },
+      "Strict FIFO +10%": {
+        "waiting": 246650,
+        "median_wait_days": 68.0,
+        "pct_over_52_weeks": 0.0,
+        "pct_over_4_weeks": 84.1
+      },
+      "25% ring-fenced for longest waiters +20%": {
+        "waiting": 174446,
+        "median_wait_days": 147.0,
+        "pct_over_52_weeks": 0.0,
+        "pct_over_4_weeks": 96.3
+      },
+      "Current priorities +20%": {
+        "waiting": 174242,
+        "median_wait_days": 630.0,
+        "pct_over_52_weeks": 64.4,
+        "pct_over_4_weeks": 99.2
+      },
+      "Strict FIFO +20%": {
+        "waiting": 174326,
+        "median_wait_days": 51.0,
+        "pct_over_52_weeks": 0.0,
+        "pct_over_4_weeks": 77.5
+      },
+      "25% ring-fenced for longest waiters +30%": {
+        "waiting": 102442,
+        "median_wait_days": 108.0,
+        "pct_over_52_weeks": 0.0,
+        "pct_over_4_weeks": 96.7
+      },
+      "Current priorities +30%": {
+        "waiting": 102210,
+        "median_wait_days": 936.0,
+        "pct_over_52_weeks": 84.0,
+        "pct_over_4_weeks": 98.6
+      },
+      "Strict FIFO +30%": {
+        "waiting": 102099,
+        "median_wait_days": 34.0,
+        "pct_over_52_weeks": 0.0,
+        "pct_over_4_weeks": 61.6
+      }
+    }
+  }
+}
