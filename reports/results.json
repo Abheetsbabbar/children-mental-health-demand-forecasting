@@ -114,6 +114,11 @@
     "median_wait": 3.430073641412231,
     "p90_wait": 12.1352431191313
   },
+  "no_change_benchmark_MAPE": {
+    "waiting_list_size": 13.040899044146856,
+    "median_wait": 3.536647834408693,
+    "p90_wait": 5.4389834437159355
+  },
   "scenarios": {
     "inputs": {
       "demand_spells_per_month_next12": 70409.25178364028,

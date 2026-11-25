@@ -12,6 +12,10 @@
   low.
 
 ## Simulator
+- **No demonstrated predictive skill.** On the later year it is no better than assuming
+  no change for median wait (3.4% vs 3.5%) and worse for the 90th percentile (12.1% vs
+  5.4%). The list-size match is partly circular, and the model was revised after looking
+  at that year. Treat every scenario as an illustration of the assumptions.
 - **One national queue.** In reality there are hundreds of provider waiting lists
   with different pathways (neurodevelopmental, eating disorders, crisis). National
   aggregates hide local variation; see Project 1 for the geography.
@@ -27,8 +31,8 @@
 - **First contact is not treatment.** The model stops the clock at a first contact,
   not at the second contact or full "meaningful help" (MRS08).
 - **FIFO is a mathematical bound, not a recommendation.** Clinically urgent
-  children must always be seen first. The ring-fenced policy is the realistic
-  option: part of capacity reserved for long-waiters, with clinical prioritisation
+  children must always be seen first. The ring-fenced policy is a less
+  extreme illustration: part of capacity reserved for long-waiters, with clinical prioritisation
   for the rest.
 - **The scenarios hold behaviour fixed.** They assume extra capacity doesn't change
   referral rates (induced demand) or exit rates.

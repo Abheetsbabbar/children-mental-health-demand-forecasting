@@ -50,4 +50,4 @@ size with its 5th/95th percentiles, median wait, and the share waiting over 4 an
 ## `reports/results.json`
 This file holds every number in the README: data coverage, the SARIMA order,
 backtest metrics, the forecast, hierarchy MAPE, simulator calibration and
-validation, and scenario inputs and outputs.
+benchmark check, and scenario inputs and outputs.

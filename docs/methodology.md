@@ -13,7 +13,7 @@ gov.uk bank holidays JSON                            ─┘
                        data/processed/*.csv (committed) + working-day calendar
                                                          │
                  analysis.py ── models.py   (5 forecasters, rolling backtest, reconciliation)
-                             └─ simulate.py (calibrate → validate → Monte Carlo scenarios)
+                             └─ simulate.py (calibrate → benchmark check → Monte Carlo scenarios)
                                                          │
                                  reports/figures/*.png + reports/results.json
 ```
@@ -32,7 +32,7 @@ gov.uk bank holidays JSON                            ─┘
 
 $$ W_t - W_{t-3} = A_{t-2:t} - C_{t-2:t} - X_{t-2:t} \quad\Rightarrow\quad X = A - C - \Delta W $$
 
-where W is children waiting, A is referral-spells started, C is first contacts and X
+where W is referral-spells waiting, A is referral-spells started, C is first contacts and X
 is referrals closed or withdrawn before a first contact. `tests/test_data_contracts.py`
 asserts that this identity holds exactly in the processed data.
 
@@ -80,7 +80,7 @@ for short series.
 ## 4. Waiting-list simulator
 
 ### State and dynamics
-The state is a vector n(a): the number of children waiting who have waited a days
+The state is a vector n(a): the number of referral-spells that have waited a days
 (a = 0 … 4,000). Each simulated day:
 
 1. **Arrivals:** A ~ Poisson(λ) children join at a = 0.
@@ -99,9 +99,10 @@ The published median (MRS10a) and 90th percentile (MRS10b) define a log-normal
 distribution of waiting times: σ = ln(p90/median)/1.2816, μ = ln(median). This is
 discretised and scaled to MRS10.
 
-### Calibration → validation
-- **Inputs:** the observed monthly arrivals, first contacts and exit rate. They are
-  not fitted, so the **list size** is a pure test of the flow accounting.
+### Calibration and benchmark check
+- **Inputs:** the observed monthly arrivals, first contacts and exit rate. The exit
+  rate is derived from the observed change in the list, so the **list-size** match is
+  partly circular and is not evidence of predictive skill.
 - **Fitted:** (k_serve, k_exit), by grid search (31 × 16 = 496 points). The objective
   is the mean squared relative error of the simulated median **and** 90th-percentile
   waits over **Sep 2024 – Aug 2025**.
@@ -109,9 +110,19 @@ discretised and scaled to MRS10.
   first", but can't tell strong from extreme. A **parsimony rule** picks the smallest
   k_serve within 5% of the best loss: **k_serve = 0.15/day (half-life 4.6 days),
   k_exit = 0**.
-- **Out-of-sample validation, Sep 2025 – Aug 2026:** MAPE of **4.2%** on list size,
-  **3.4%** on median wait and **12.1%** on 90th-percentile wait. Random order (loss
-  0.77) and FIFO (loss 1.24) fit far worse than the calibrated rule (0.016).
+- **Later year, Sep 2025 – Aug 2026,** using that year's observed flows (MAPE):
+
+  | Measure | Simulator | No change since Aug 2025 |
+  |---|---|---|
+  | List size (partly circular) | 4.2% | 13.0% |
+  | Median wait | 3.4% | 3.5% |
+  | 90th-percentile wait | 12.1% | 5.4% |
+
+  The simulator is no better than the benchmark on median wait and worse on the 90th
+  percentile. Its structure was also revised after an early look at this year (a separate
+  exit priority, then the parsimony rule), so this is **not a clean holdout test**.
+- In the calibration year, random order (loss 0.77) and FIFO (loss 1.24) fit far worse
+  than the calibrated rule (0.016), so the data do favour a newest-first pattern.
 
 ### Scenarios
 - **Horizon:** 24 months from Aug 2026, starting from the observed list (279,604;

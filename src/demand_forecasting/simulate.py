@@ -1,6 +1,6 @@
 """Waiting-list simulation for children's mental health services (England).
 
-A discrete-time (daily) stock-and-flow model of the list of children waiting for a
+A discrete-time (daily) stock-and-flow model of the list of referrals waiting for a
 first contact, tracked by how long each child has waited so far ("age" in days):
 
     each day:  new referrals join at age 0             ~ Poisson(arrival rate)
@@ -17,8 +17,9 @@ Referrals closed without a first contact are distributed the same way with their
 parameter k_exit (most closures happen soon after referral - signposting, redirection,
 declined appointments - rather than uniformly across the list).
 
-Both parameters are calibrated so the model reproduces the observed median and
-90th-percentile waits, then validated on a later, unseen year.
+Both parameters are calibrated to the observed median and 90th-percentile waits, then
+compared with a no-change benchmark on a later year. The model is illustrative: see
+docs/limitations_and_ethics.md.
 """
 
 from __future__ import annotations

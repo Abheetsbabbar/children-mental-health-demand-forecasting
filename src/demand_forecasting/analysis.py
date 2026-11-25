@@ -109,7 +109,7 @@ def plan_from_observed(wl: pd.DataFrame) -> list[sim.MonthPlan]:
 
 
 def calibrate_and_validate(wl: pd.DataFrame, results: dict) -> tuple[float, float]:
-    """Calibrate (k_serve, k_exit) on one year by grid search, then validate on the following year."""
+    """Calibrate (k_serve, k_exit) on one year by grid search, then check against a no-change benchmark."""
     wl = wl.dropna(subset=["other_exits_per_month"]).reset_index(drop=True)
     start = wl.iloc[1]  # simulation starts from this month-end snapshot
     calib = wl.iloc[2:14]
@@ -152,6 +152,13 @@ def calibrate_and_validate(wl: pd.DataFrame, results: dict) -> tuple[float, floa
         "waiting_list_size": mape(full.waiting[in_valid].to_numpy(), obs.waiting[in_valid].to_numpy()),
         "median_wait": mape(full.median_wait[in_valid].to_numpy(), obs.median_wait_days[in_valid].to_numpy()),
         "p90_wait": mape(full.p90_wait[in_valid].to_numpy(), obs.p90_wait_days[in_valid].to_numpy()),
+    }
+    # Naive comparison: every later month equals the last calibration month
+    last, later = calib.iloc[-1], obs[in_valid.to_numpy()]
+    results["no_change_benchmark_MAPE"] = {
+        "waiting_list_size": mape(last.waiting, later.waiting.to_numpy()),
+        "median_wait": mape(last.median_wait_days, later.median_wait_days.to_numpy()),
+        "p90_wait": mape(last.p90_wait_days, later.p90_wait_days.to_numpy()),
     }
     fig_sim_validation(full, obs, calib.month_end.iloc[-1])
     return k_serve, k_exit
@@ -289,18 +296,18 @@ def fig_age_bands(ref):
 def fig_sim_validation(full, obs, calib_end):
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
     for ax, sim_col, obs_col, title, div in [
-        (axes[0], "waiting", "waiting", "Children waiting for first contact (thousands)", 1000),
+        (axes[0], "waiting", "waiting", "Referrals waiting for first contact (thousands)", 1000),
         (axes[1], "median_wait", "median_wait_days", "Median days waited so far", 1),
     ]:
         ax.plot(obs.month_end, obs[obs_col] / div, color=style.INK_2, lw=1.6, marker="o", ms=3, label="Observed")
         ax.plot(full.month_end, full[sim_col] / div, color=style.BLUE, lw=2, label="Simulated")
         ax.axvspan(full.month_end.min(), calib_end, color=style.GRID, alpha=0.6, lw=0)
         ax.text(full.month_end.min(), ax.get_ylim()[1], " calibration", va="top", fontsize=8, color=style.INK_2)
-        ax.text(calib_end, ax.get_ylim()[1], "  out-of-sample validation", va="top", fontsize=8, color=style.INK_2)
+        ax.text(calib_end, ax.get_ylim()[1], "  later year", va="top", fontsize=8, color=style.INK_2)
         ax.set_title(title, fontsize=11)
         ax.legend(fontsize=8, loc="lower right")
         style.date_axis(ax)
-    fig.suptitle("The waiting-list simulator reproduces the real list it was not fitted to",
+    fig.suptitle("Simulated and observed waiting list (simulator uses observed flows)",
                  x=0.01, ha="left", fontweight="bold")
     style.source_note(fig, SOURCE + " Four-week-wait measures MRS10/10a/10b/11/16, England.")
     fig.savefig(config.FIGURES / "04_simulator_validation.png")
@@ -323,7 +330,7 @@ def fig_scenarios(agg, wl):
         ax.text(g.month_end.iloc[-1], g.waiting.iloc[-1] / 1000, f"  +{u}%", va="center", fontsize=8,
                 color=style.INK_2)
     ax.set_ylim(bottom=0)
-    ax.set_ylabel("Children waiting for first contact (thousands)")
+    ax.set_ylabel("Referrals waiting for first contact (thousands)")
     ax.set_title("List size by first-contact capacity uplift", fontsize=11)
     style.date_axis(ax)
     ax.legend(fontsize=8, loc="lower left")
@@ -342,11 +349,11 @@ def fig_scenarios(agg, wl):
             ax.text(xi, v + 1, f"{v:.0f}", ha="center", fontsize=7.5, color=style.INK_2)
     ax.set_xticks(x, ["+0%", "+10%", "+20%", "+30%"])
     ax.set_xlabel("First-contact capacity uplift")
-    ax.set_ylabel("% of children still waiting who have waited > 52 weeks")
+    ax.set_ylabel("% of waiting referrals waiting > 52 weeks")
     ax.set_title("Who is left waiting after 24 months?", fontsize=11)
     ax.grid(axis="x", visible=False)
     ax.legend(fontsize=7.5, loc="upper left")
-    fig.suptitle("Capacity shrinks the list; prioritisation decides who is left behind",
+    fig.suptitle("Illustrative scenarios: capacity and prioritisation",
                  x=0.01, ha="left", fontweight="bold")
     style.source_note(fig, SOURCE + " Monte Carlo: 40 stochastic runs per scenario; bands = 5th-95th percentile. "
                            "Demand = ensemble forecast.")
